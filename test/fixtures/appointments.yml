@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer: one
+  service: one
+  start_time: 2023-08-16 11:17:06
+  end_time: 2023-08-16 11:17:06
+  confirmed: false
+
+two:
+  customer: two
+  service: two
+  start_time: 2023-08-16 11:17:06
+  end_time: 2023-08-16 11:17:06
+  confirmed: false
