@@ -79,8 +79,8 @@ class AppointmentsController < ApplicationController
       appointment_id: appointment.id,
       start_time: appointment.start_time,
       end_time: appointment.end_time,
-      title: "Appointment",
-      description: "Appointment with Jay"
+      title: "#{appointment.service.name}",
+      description: "Appointment with #{appointment.customer.surname}"
     )
   end
 end
