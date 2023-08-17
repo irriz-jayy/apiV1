@@ -23,16 +23,6 @@ class AppointmentsController < ApplicationController
     end
   
     # POST /appointments 
-    # def create
-    #   @appointment = Appointment.new(appointment_params)
-  
-    #     if @appointment.save
-    #       render json: @appointment, status: :created
-    #     else
-    #       render json: @appointment.errors.full_messages, status: :unprocessable_entity 
-    #     end
-    # end
-  
     def create
       @appointment = Appointment.new(appointment_params)
       if @appointment.save
@@ -74,15 +64,15 @@ class AppointmentsController < ApplicationController
         render json:{error: "Appointment not found"}, status: :not_found
       end
 
-       def create_calendar_event(appointment)
-    CalendarEvent.create(
-      appointment_id: appointment.id,
-      start_time: appointment.start_time,
-      end_time: appointment.end_time,
-      title: "#{appointment.service.name}",
-      description: "Appointment with #{appointment.customer.surname}"
-    )
-  end
+      # Simultaneous creation of calendar events
+      def create_calendar_event(appointment)
+        CalendarEvent.create(
+        appointment_id: appointment.id,
+        start_time: appointment.start_time,
+        end_time: appointment.end_time,
+        title: "Appointment for #{appointment.service.name}",
+        description: "Appointment with #{appointment.customer.surname}")
+      end
 end
 
   

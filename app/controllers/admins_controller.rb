@@ -1,6 +1,7 @@
 class AdminsController < ApplicationController
     rescue_from ActiveRecord::RecordNotFound , with: :render_not_found_response
     before_action :set_admin, only: %i[ show  update destroy ]
+    skip_before_action :authorized, only: [:create]
   
     # GET /admins or /admins.json
     def index
@@ -17,13 +18,19 @@ class AdminsController < ApplicationController
     # POST /admins
     def create
       @admin = Admin.new(admin_params)
-  
-        if @admin.save
-          render json:@admin, status: :created
-        else
-          render json: { error: @admin.errors.full_messages }, status: :unprocessable_entity
-        end
+    
+      if @admin.save
+        token = encode_token(admin_id: @admin.id)
+        render json: { admin: @admin, jwt: token }, status: :created
+      else
+        render json: { error: @admin.errors.full_messages }, status: :unprocessable_entity
+      end
     end
+
+    def profile
+      render json: @admin
+    end
+    
   
     # PATCH/PUT /admins/1
     def update
