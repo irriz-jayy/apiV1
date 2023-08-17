@@ -1,6 +1,7 @@
 class CustomersController < ApplicationController
     before_action :set_customer, only: %i[ show edit update destroy ]
     rescue_from ActiveRecord::RecordNotFound , with: :render_not_found_response
+    skip_before_action :authorized, only: [:create] 
 
   
     # GET /customers 
@@ -28,10 +29,15 @@ class CustomersController < ApplicationController
       @customer = Customer.new(customer_params)
     
       if @customer.save
-        render json: @customer, status: :created
+        token = encode_token(customer_id:@customer.id)
+        render json: {customer: @customer, jwt:token},  status: :created
       else
         render json: { errors: @customer.errors.full_messages }, status: :unprocessable_entity
       end
+    end
+
+    def profile
+      render json: @customer
     end
     
   

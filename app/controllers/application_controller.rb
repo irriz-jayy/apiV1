@@ -29,16 +29,26 @@ class ApplicationController < ActionController::API
         end
     end
 
-    def logged_in?
-        !!current_admin
-    end
-
-    def authorized
-        if logged_in?
-            true
-        else
-            render json: {message: "Please log in"}, status: :unauthorized
+    def current_customer
+        if decoded_token
+          customer_id = decoded_token[0]['user_id']
+          @customer = Customer.find_by(id: customer_id)
         end
-    end
+      end
+
+      
+    
+      def logged_in?
+        !!current_admin || !!current_customer
+      end
+      def authorized
+        if logged_in?
+          true
+        else
+          Rails.logger.info("current_admin: #{current_admin.inspect}")
+          Rails.logger.info("current_customer: #{current_customer.inspect}")
+          render json: { message: "Please log in" }, status: :unauthorized
+        end
+      end
 
 end

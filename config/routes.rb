@@ -5,7 +5,8 @@ Rails.application.routes.draw do
   resources :appointments
   resources :admins
   post "/login", to: "auth#create"
-  get "/profile", to: "admins#profile"
+  get "/admin_profile", to: "admins#profile"
+  get "/customer_profile", to: "customers#profile"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
