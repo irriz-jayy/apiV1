@@ -23,16 +23,26 @@ class AppointmentsController < ApplicationController
     end
   
     # POST /appointments 
+    # def create
+    #   @appointment = Appointment.new(appointment_params)
+  
+    #     if @appointment.save
+    #       render json: @appointment, status: :created
+    #     else
+    #       render json: @appointment.errors.full_messages, status: :unprocessable_entity 
+    #     end
+    # end
+  
     def create
       @appointment = Appointment.new(appointment_params)
-  
-        if @appointment.save
-          render json: @appointment, status: :created
-        else
-          render json: @appointment.errors.full_messages, status: :unprocessable_entity 
-        end
+      if @appointment.save
+        create_calendar_event(@appointment)
+        render json: @appointment, status: :created
+      else
+        render json: @appointment.errors, status: :unprocessable_entity
+      end
     end
-  
+
     # PATCH/PUT /appointments/1
     def update
         if @appointment.update(appointment_params)
@@ -63,5 +73,16 @@ class AppointmentsController < ApplicationController
       def render_not_found_response
         render json:{error: "Appointment not found"}, status: :not_found
       end
+
+       def create_calendar_event(appointment)
+    CalendarEvent.create(
+      appointment_id: appointment.id,
+      start_time: appointment.start_time,
+      end_time: appointment.end_time,
+      title: "Appointment",
+      description: "Appointment with Jay"
+    )
+  end
 end
+
   
