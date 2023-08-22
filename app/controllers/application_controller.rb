@@ -24,7 +24,7 @@ class ApplicationController < ActionController::API
 
     def current_admin
         if decoded_token
-            admin_id = decoded_token[0]['admin_id']
+            admin_id = decoded_token[0]['user_id']
             @admin = Admin.find_by(id:admin_id)
         end
     end
